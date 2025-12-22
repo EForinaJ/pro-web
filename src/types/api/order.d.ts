@@ -10,19 +10,9 @@ declare namespace Order {
             id: number;
             money?: number | null;
         }
-        type Distribute = {
-            id: number;
-            witkeyId: number | null;
-        }
         type Refund = {
             id: number;
             money: number | null;
-            reason: string | null;
-        }
-        type ChangeWitkey = {
-            id: number;
-            oldId: number | null;
-            newId: number | null;
             reason: string | null;
         }
     }
@@ -31,11 +21,7 @@ declare namespace Order {
         type Info = {
             id: number;
             code: string;
-            user: {
-                id: number;
-                name: string;
-                avatar: string;
-            };
+            user: string;
             product: {
                 id: number;
                 name: string;
@@ -83,14 +69,5 @@ declare namespace Order {
             finishTime:string | null;
             requirements:string | null;
         }
-
-        type WitkeyList = Api.Common.PaginatedResponse<{
-            name:string;
-            game:string;
-            title:string;
-            reason:string;
-            isReplaced:number;
-            createTime:string;
-        }>
     }
 }

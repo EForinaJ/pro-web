@@ -107,7 +107,7 @@ const drawerType = computed(() => props.type)
 const formRef = ref<FormInstance>()
 
 // 表单数据
-const formData = reactive<User.Params.Create>({
+const formData = reactive<User.Params.Model>({
   id: 0,
   name: null,
   phone: null,

@@ -39,11 +39,7 @@
         :id="id"
         @submit="refreshData"
       />
-      <OrderChangeWitkeyModal
-        v-model:visible="changeWitkeyModalVisible"
-        :id="id"
-        @submit="refreshData"
-      />
+
       <OrderRefundModal
         v-model:visible="refundModalVisible"
         :id="id"
@@ -51,11 +47,6 @@
       />
       <OrderAddDiscountModal
         v-model:visible="addDiscountModalVisible"
-        :id="id"
-        @submit="refreshData"
-      />
-      <OrderDistributeModal
-        v-model:visible="distributeModalVisible"
         :id="id"
         @submit="refreshData"
       />
@@ -72,13 +63,12 @@ import { ButtonMoreItem } from '@/components/core/forms/art-button-more/index.vu
 import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
 import ArtButtonMore from '@/components/core/forms/art-button-more/index.vue'
 import { fetchGetOrderList, fetchPostOrderCancel, fetchPostOrderPaid } from '@/api/order'
-import { OrderStatus, PayStatus } from '@/enums/statusEnum'
+import { OrderStatus} from '@/enums/statusEnum'
 import OrderAddDiscountModal from './modules/order-add-discount-modal.vue'
 import { PayMode } from '@/enums/modeEnum'
-import OrderDistributeModal from './modules/order-distribute-modal.vue'
 import OrderViewDrawer from './modules/order-view-drawer.vue'
 import OrderRefundModal from './modules/order-refund-modal.vue'
-import OrderChangeWitkeyModal from './modules/order-change-witkey-modal.vue'
+
 
 const { hasAuth } = useAuth();
 defineOptions({ name: 'Order' })
@@ -91,8 +81,6 @@ const siteStore = useSiteStore()
 const refundModalVisible = ref(false)
 const viewDrawerVisible = ref(false)
 const addDiscountModalVisible = ref(false)
-const distributeModalVisible = ref(false)
-const changeWitkeyModalVisible = ref(false)
 const id = ref<number>(0)
 
 // 选中行
@@ -204,7 +192,7 @@ const {
         label: '用户信息',
         width: 160,
         formatter: (row) => {
-          return h('p', { }, row.user.name)
+          return h('p', { }, row.user)
         }
       },
       {
@@ -265,13 +253,8 @@ const {
             })
           }
 
-          if (row.status == OrderStatus.PendingService) {
+          if (row.status != OrderStatus.PendingService) {
             btnList.push({
-              key: 'distribute',
-              label: '派发订单',
-              icon: 'solar:emoji-funny-circle-bold',
-              auth:'distribute'
-            },{
               key: 'refund',
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
@@ -281,11 +264,6 @@ const {
 
           if (row.status == OrderStatus.InProgress) {
             btnList.push({
-              key: 'changeWitkey',
-              label: '变更威客',
-              icon: 'solar:emoji-funny-circle-bold',
-              auth:'changeWitkey'
-            },{
               key: 'refund',
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
@@ -329,14 +307,8 @@ const buttonMoreClick = (item: ButtonMoreItem, row: Order.Response.Info) => {
     case 'cancel':
       handleCancel(row)
       break
-    case 'distribute':
-      handleDistribute(row)
-      break
     case 'refund':
       handleRefund(row)
-      break
-    case 'changeWitkey':
-      handleChangeWitkey(row)
       break
     case 'delete':
       handleDelete(row)
@@ -356,12 +328,7 @@ const handleSearch = (params: Record<string, any>) => {
   getData()
 }
 
-const handleChangeWitkey = (row:Order.Response.Info) => {
-   id.value = row.id
-  nextTick(() => {
-    changeWitkeyModalVisible.value = true
-  })
-}
+
 const handleRefund = (row:Order.Response.Info) => {
    id.value = row.id
   nextTick(() => {
@@ -409,12 +376,7 @@ const handleCancel = (row:Order.Response.Info): void => {
   })
 }
 
-const handleDistribute = (row:Order.Response.Info) => {
-    id.value = row.id
-    nextTick(() => {
-      distributeModalVisible.value = true
-    })
-}
+
 
 
 const handleBatchDelete = () =>{

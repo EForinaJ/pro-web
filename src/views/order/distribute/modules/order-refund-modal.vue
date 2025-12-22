@@ -1,6 +1,6 @@
 <template>
     <ElDialog
-      title="派发威客"
+      title="退款申请"
       width="25%"
       :model-value="visible"
       align-center
@@ -8,8 +8,21 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem prop="witkeyId">
-            <ElInput v-model="form.witkeyId" placeholder="请输入威客ID" />
+        <ElFormItem label="退款金额" prop="money">
+            <ElInputNumber 
+            :precision="2"
+            style="width: 100%;"
+            v-model="form.money"
+            placeholder="请输入退款金额" 
+            controls-position="right"/>
+        </ElFormItem>
+        <ElFormItem label="退款原因" prop="reason">
+            <ElInput
+            v-model="form.reason"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入退款原因"
+          />
         </ElFormItem>
       </ElForm>
       <template #footer>
@@ -20,7 +33,7 @@
   </template>
   
 <script setup lang="ts">
-import { fetchPostOrderDistribute } from '@/api/order';
+import { fetchPostOrderRefund } from '@/api/order';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -53,17 +66,18 @@ const visible = computed({
 /**
  * 表单数据
  */
-const form = reactive<Order.Params.Distribute>({
+const form = reactive<Order.Params.Refund>({
     id: 0, // 权限ID
-    witkeyId: null,
+    money: null,
+    reason: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    witkeyId: [
-        { required: true, message: '请输入威客ID', trigger: 'blur' },
+    money: [
+        { required: true, message: '请输入预存充值', trigger: 'blur' },
     ],
 })
 
@@ -84,8 +98,8 @@ watch(
  */
 const initForm = async () => {
     Object.assign(form, {
-        id: props.id!, // 权限ID
-        money: null
+        id: props.id!,
+        money: 0,
     })
 }
 
@@ -113,7 +127,8 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostOrderDistribute(form)
+        await fetchPostOrderRefund(form)
+
         ElMessage.success('更新成功')
         emit('submit')
         handleClose()
