@@ -108,27 +108,6 @@
             </div>
         </template>
     </ElCard>
-
-    <ElCard v-loading="loading" shadow="never" class="mt-[20px]">
-        <template #header>
-            <div class="font-bold">
-                当前接单威客
-            </div>
-        </template>
-        <ElTable :data="witkeyList" style="width: 100%">
-            <ElTableColumn prop="name" label="威客名称"/>
-            <ElTableColumn prop="game" label="所属游戏">
-                <template #default="scope">
-                    <ElTag type="primary">{{ scope.row.game }}</ElTag>
-                </template>
-            </ElTableColumn>
-            <ElTableColumn prop="title" label="头衔" >
-                <template #default="scope">
-                    <ElTag type="primary">{{ scope.row.title }}</ElTag>
-                </template>
-            </ElTableColumn>
-        </ElTable>
-    </ElCard>
 </template>
 
 <script setup lang="ts">
@@ -216,12 +195,9 @@ const getData = async () =>{
 }
 
 const productData = computed(()=>{
-    return [detail.value?.product]
+    return detail.value ? [detail.value?.product] :[]
 })
 
-const witkeyList = computed(()=>{
-   return detail.value?.witkeyList ? detail.value?.witkeyList : []
-})
 
 
 

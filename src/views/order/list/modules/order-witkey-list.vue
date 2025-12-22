@@ -15,14 +15,29 @@
 
 <script setup lang="ts">
 import { fetchGetOrderWitkeyList } from '@/api/order';
-import { ServiceStatus } from '@/enums/statusEnum';
 import { useTable } from '@/hooks';
-import {  ElRate, ElTag } from 'element-plus';
+import {  ElTag } from 'element-plus';
 interface Props {
   id?: number;
 }
 const props = defineProps<Props>();
+// 订单状态配置
+const REPLACED_CONFIG = {
+  1: { type: 'primary' as const, text: '否' },
+  2: { type: 'danger' as const, text: '是' },
+} as const
 
+/**
+ * 获取订单状态配置
+ */
+const getIsReplaced = (isReplaced: number) => {
+  return (
+    REPLACED_CONFIG[isReplaced as keyof typeof REPLACED_CONFIG] || {
+      type: 'info' as const,
+      text: '未知'
+    }
+  )
+}
 
 const {
     columns,
@@ -44,6 +59,12 @@ const {
         },
         columnsFactory: () => [
             {
+                type: "expand",
+                formatter:(row)=>{
+                    return  h('p', { }, row.reason != '' ? `变更原因: ${row.reason}` : '未变更')
+                }
+            },
+            {
                 prop: 'name',
                 label: '威客名称',
                 width: 160,
@@ -60,6 +81,14 @@ const {
                 label: '所属头衔',
                 formatter: (row) => {
                     return h(ElTag, { type:"primary" }, () => row.title )
+                }
+            },
+            {
+                prop: 'isReplaced',
+                label: '是否换下',
+                formatter: (row) => {
+                    const isReplaced = getIsReplaced(row.isReplaced)
+                    return h(ElTag, { type: isReplaced.type }, () => isReplaced.text)
                 }
             },
             {

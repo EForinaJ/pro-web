@@ -38,6 +38,12 @@ export function fetchPostOrderRefund(data:Order.Params.Refund) {
     data
   })
 }
+export function fetchPostOrderChangeWitkey(data:Order.Params.ChangeWitkey) {
+  return request.post({
+    url: '/order/change/witkey',
+    data
+  })
+}
 export function fetchGetOrderDetail(params: {id:number}) {
   return request.get<Order.Response.Detail>({
     url: '/order/detail',

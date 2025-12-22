@@ -39,8 +39,13 @@
         :id="id"
         @submit="refreshData"
       />
+      <OrderChangeWitkeyModal
+        v-model:visible="changeWitkeyModalVisible"
+        :id="id"
+        @submit="refreshData"
+      />
       <OrderRefundModal
-        v-model:visible="refundDrawerVisible"
+        v-model:visible="refundModalVisible"
         :id="id"
         @submit="refreshData"
       />
@@ -73,6 +78,7 @@ import { PayMode } from '@/enums/modeEnum'
 import OrderDistributeModal from './modules/order-distribute-modal.vue'
 import OrderViewDrawer from './modules/order-view-drawer.vue'
 import OrderRefundModal from './modules/order-refund-modal.vue'
+import OrderChangeWitkeyModal from './modules/order-change-witkey-modal.vue'
 
 const { hasAuth } = useAuth();
 defineOptions({ name: 'Order' })
@@ -82,10 +88,11 @@ const siteStore = useSiteStore()
 
 
 // 弹窗相关
-const refundDrawerVisible = ref(false)
+const refundModalVisible = ref(false)
 const viewDrawerVisible = ref(false)
 const addDiscountModalVisible = ref(false)
 const distributeModalVisible = ref(false)
+const changeWitkeyModalVisible = ref(false)
 const id = ref<number>(0)
 
 // 选中行
@@ -328,6 +335,9 @@ const buttonMoreClick = (item: ButtonMoreItem, row: Order.Response.Info) => {
     case 'refund':
       handleRefund(row)
       break
+    case 'changeWitkey':
+      handleChangeWitkey(row)
+      break
     case 'delete':
       handleDelete(row)
       break
@@ -346,11 +356,16 @@ const handleSearch = (params: Record<string, any>) => {
   getData()
 }
 
-
+const handleChangeWitkey = (row:Order.Response.Info) => {
+   id.value = row.id
+  nextTick(() => {
+    changeWitkeyModalVisible.value = true
+  })
+}
 const handleRefund = (row:Order.Response.Info) => {
    id.value = row.id
   nextTick(() => {
-    refundDrawerVisible.value = true
+    refundModalVisible.value = true
   })
 }
 const handleView = (row:Order.Response.Info) => {

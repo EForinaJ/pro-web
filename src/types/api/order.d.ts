@@ -19,6 +19,12 @@ declare namespace Order {
             money: number | null;
             reason: string | null;
         }
+        type ChangeWitkey = {
+            id: number;
+            oldId: number | null;
+            newId: number | null;
+            reason: string | null;
+        }
     }
     namespace Response {
        
@@ -65,7 +71,6 @@ declare namespace Order {
                 game: string;
                 category: string;
             };
-            witkeyList: WitkeyList[];
             totalAmount: number;
             discountAmount: number;
             actualAmount:number;
@@ -80,11 +85,11 @@ declare namespace Order {
         }
 
         type WitkeyList = Api.Common.PaginatedResponse<{
-            id:number;
             name:string;
             game:string;
             title:string;
-            status?:number;
+            reason:string;
+            isReplaced:number;
             createTime:string;
         }>
     }

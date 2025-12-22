@@ -1,6 +1,6 @@
 <template>
     <ElDialog
-      title="派发威客"
+      title="变更威客"
       width="25%"
       :model-value="visible"
       align-center
@@ -8,8 +8,19 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem prop="witkeyId">
-            <ElInput v-model="form.witkeyId" placeholder="请输入威客ID" />
+        <ElFormItem label="旧威客" prop="oldId">
+            <ElInput  v-model="form.oldId" placeholder="请输入旧威客ID" />
+        </ElFormItem>
+        <ElFormItem label="新威客" prop="newId">
+            <ElInput v-model="form.newId" placeholder="请输入新威客ID" />
+        </ElFormItem>
+        <ElFormItem label="变更原因" prop="reason">
+            <ElInput
+            v-model="form.reason"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入退款原因"
+          />
         </ElFormItem>
       </ElForm>
       <template #footer>
@@ -20,7 +31,7 @@
   </template>
   
 <script setup lang="ts">
-import { fetchPostOrderDistribute } from '@/api/order';
+import { fetchPostOrderChangeWitkey, fetchPostOrderRefund } from '@/api/order';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -53,17 +64,25 @@ const visible = computed({
 /**
  * 表单数据
  */
-const form = reactive<Order.Params.Distribute>({
+const form = reactive<Order.Params.ChangeWitkey>({
     id: 0, // 权限ID
-    witkeyId: null,
+    oldId: null,
+    newId: null,
+    reason: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    witkeyId: [
-        { required: true, message: '请输入威客ID', trigger: 'blur' },
+    oldId: [
+        { required: true, message: '请输入旧威客ID', trigger: 'blur' },
+    ],
+    newId: [
+        { required: true, message: '请输入新威客ID', trigger: 'blur' },
+    ],
+    reason: [
+        { required: true, message: '请输入变更原因', trigger: 'blur' },
     ],
 })
 
@@ -84,8 +103,8 @@ watch(
  */
 const initForm = async () => {
     Object.assign(form, {
-        id: props.id!, // 权限ID
-        money: null
+        id: props.id!,
+        money: 0,
     })
 }
 
@@ -113,7 +132,8 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostOrderDistribute(form)
+        await fetchPostOrderChangeWitkey(form)
+
         ElMessage.success('更新成功')
         emit('submit')
         handleClose()
