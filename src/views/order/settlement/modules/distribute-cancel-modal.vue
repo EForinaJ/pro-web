@@ -1,6 +1,6 @@
 <template>
     <ElDialog
-      title="变更威客"
+      title="取消派单"
       width="25%"
       :model-value="visible"
       align-center
@@ -8,18 +8,12 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem label="旧威客" prop="oldId">
-            <ElInput  v-model="form.oldId" placeholder="请输入旧威客ID" />
-        </ElFormItem>
-        <ElFormItem label="新威客" prop="newId">
-            <ElInput v-model="form.newId" placeholder="请输入新威客ID" />
-        </ElFormItem>
-        <ElFormItem label="变更原因" prop="reason">
+        <ElFormItem label="取消原因" prop="reason">
             <ElInput
             v-model="form.reason"
             type="textarea"
             :rows="3"
-            placeholder="请输入退款原因"
+            placeholder="请输入取消原因"
           />
         </ElFormItem>
       </ElForm>
@@ -31,7 +25,8 @@
   </template>
   
 <script setup lang="ts">
-import { fetchPostOrderChangeWitkey, fetchPostOrderRefund } from '@/api/order';
+
+import { fetchPostDistributeCancel } from '@/api/distribute';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -64,10 +59,8 @@ const visible = computed({
 /**
  * 表单数据
  */
-const form = reactive<Order.Params.ChangeWitkey>({
+const form = reactive<Distribute.Params.Cancel>({
     id: 0, // 权限ID
-    oldId: null,
-    newId: null,
     reason: null,
 })
 
@@ -75,14 +68,8 @@ const form = reactive<Order.Params.ChangeWitkey>({
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    oldId: [
-        { required: true, message: '请输入旧威客ID', trigger: 'blur' },
-    ],
-    newId: [
-        { required: true, message: '请输入新威客ID', trigger: 'blur' },
-    ],
     reason: [
-        { required: true, message: '请输入变更原因', trigger: 'blur' },
+        { required: true, message: '请输入取消原因', trigger: 'blur' },
     ],
 })
 
@@ -132,9 +119,9 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostOrderChangeWitkey(form)
+        await fetchPostDistributeCancel(form)
 
-        ElMessage.success('更新成功')
+        ElMessage.success('取消成功')
         emit('submit')
         handleClose()
         handleCancel()

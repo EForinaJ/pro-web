@@ -6,7 +6,7 @@
 <template>
   <div class="order-page art-full-height">
     <!-- 搜索栏 -->
-    <!-- <OrderSearch v-model="searchForm" @search="handleSearch" @reset="resetSearchParams"></OrderSearch> -->
+    <OrderSearch v-model="searchForm" @search="handleSearch" @reset="resetSearchParams"></OrderSearch>
 
     <ElCard class="art-table-card" shadow="never">
       <!-- 表格头部 -->
@@ -62,12 +62,13 @@ import { useAuth } from '@/hooks'
 import { ButtonMoreItem } from '@/components/core/forms/art-button-more/index.vue'
 import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
 import ArtButtonMore from '@/components/core/forms/art-button-more/index.vue'
-import { fetchGetOrderList, fetchPostOrderCancel, fetchPostOrderPaid } from '@/api/order'
+import { fetchGetOrderList, fetchPostOrderCancel, fetchPostOrderDelete, fetchPostOrderPaid } from '@/api/order'
 import { OrderStatus} from '@/enums/statusEnum'
 import OrderAddDiscountModal from './modules/order-add-discount-modal.vue'
 import { PayMode } from '@/enums/modeEnum'
 import OrderViewDrawer from './modules/order-view-drawer.vue'
 import OrderRefundModal from './modules/order-refund-modal.vue'
+import OrderSearch from './modules/order-search.vue'
 
 
 const { hasAuth } = useAuth();
@@ -250,15 +251,25 @@ const {
               icon: 'solar:close-circle-bold',
               color: '#f56c6c',
               auth:'cancel'
+            },{
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
             })
           }
 
-          if (row.status != OrderStatus.PendingService) {
+          if (row.status == OrderStatus.PendingService) {
             btnList.push({
               key: 'refund',
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
               auth:'refund'
+            },{
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
             })
           }
 
@@ -268,6 +279,43 @@ const {
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
               auth:'refund'
+            },{
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
+            })
+          }
+
+          if (row.status == OrderStatus.Completed) {
+            btnList.push({
+              key: 'refund',
+              label: '立即退款',
+              icon: 'solar:electric-refueling-bold',
+              auth:'refund'
+            },{
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
+            })
+          }
+
+          if (row.status == OrderStatus.Cancel) {
+            btnList.push({
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
+            })
+          }
+
+          if (row.status == OrderStatus.Refund) {
+            btnList.push({
+              key: 'delete',
+              label: '删除订单',
+              icon: 'ep:element-plus',
+              auth:'delete'
             })
           }
 
@@ -388,7 +436,7 @@ const handleBatchDelete = () =>{
     }).then(async() => {
       // TODO: 调用删除接口
       ElMessage.success('删除成功')
-      // await fetchPostOrderDelete({ids:selectedRows.value})
+      await fetchPostOrderDelete({ids:selectedRows.value})
       refreshData()
     })
     .catch(() => {
@@ -406,7 +454,7 @@ const handleDelete = async (row: Order.Response.Info): Promise<void> => {
   }).then(async() => {
     // TODO: 调用删除接口
     ElMessage.success('删除成功')
-    // await fetchPostOrderDelete({ids:[row.id]})
+    await fetchPostOrderDelete({ids:[row.id]})
     refreshData()
   })
   .catch(() => {

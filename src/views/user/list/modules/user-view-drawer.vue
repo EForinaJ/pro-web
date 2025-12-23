@@ -11,7 +11,6 @@
             <ElTabPane label="用户详情" name="detail" />
             <ElTabPane label="余额变更" name="balance"/>
             <ElTabPane label="充值记录" name="recharge"/>
-            <ElTabPane label="操作日志" name="log"/>
         </ElTabs>
         <component :is="userMap[activeKey]" :id="id"/>
     </ElDrawer>
@@ -23,7 +22,6 @@ import UserDetail from './user-detail.vue';
 import { TabPaneName } from 'element-plus';
 import UserBalanceList from './user-balance-list.vue';
 import UserRechargeList from './user-recharge-list.vue';
-import UserLogs from './user-logs.vue';
 interface Props {
     modelValue: boolean
     id?: number | null
@@ -51,7 +49,6 @@ const userMap: Record<string, Component> = {
     "detail": UserDetail,
     "balance":UserBalanceList,
     "recharge": UserRechargeList,
-    "log": UserLogs,
 };
 
   

@@ -1,28 +1,18 @@
 <template>
     <ElDialog
-      title="退款申请"
-      width="25%"
+      title="派发威客"
+      width="20%"
       :model-value="visible"
       align-center
       @update:model-value="handleCancel"
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem label="退款金额" prop="money">
-            <ElInputNumber 
-            :precision="2"
-            style="width: 100%;"
-            v-model="form.money"
-            placeholder="请输入退款金额" 
-            controls-position="right"/>
+        <ElFormItem prop="code">
+            <ElInput v-model="form.code" placeholder="请输入订单编号" />
         </ElFormItem>
-        <ElFormItem label="退款原因" prop="reason">
-            <ElInput
-            v-model="form.reason"
-            type="textarea"
-            :rows="3"
-            placeholder="请输入退款原因"
-          />
+        <ElFormItem prop="witkeyId">
+            <ElInput v-model="form.witkeyId" placeholder="请输入威客ID" />
         </ElFormItem>
       </ElForm>
       <template #footer>
@@ -33,7 +23,7 @@
   </template>
   
 <script setup lang="ts">
-import { fetchPostOrderRefund } from '@/api/order';
+import { fetchPostDistributeCreate } from '@/api/distribute';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -66,18 +56,20 @@ const visible = computed({
 /**
  * 表单数据
  */
-const form = reactive<Order.Params.Refund>({
-    id: 0, // 权限ID
-    money: null,
-    reason: null,
+const form = reactive<Distribute.Params.Model>({
+    witkeyId: null,
+    code: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    money: [
-        { required: true, message: '请输入预存充值', trigger: 'blur' },
+    witkeyId: [
+        { required: true, message: '请输入威客ID', trigger: 'blur' },
+    ],
+    code: [
+        { required: true, message: '请输入订单编号', trigger: 'blur' },
     ],
 })
 
@@ -98,8 +90,8 @@ watch(
  */
 const initForm = async () => {
     Object.assign(form, {
-        id: props.id!,
-        money: 0,
+        id: props.id!, // 权限ID
+        money: null
     })
 }
 
@@ -127,9 +119,8 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostOrderRefund(form)
-
-        ElMessage.success('更新成功')
+        await fetchPostDistributeCreate(form)
+        ElMessage.success('派发成功')
         emit('submit')
         handleClose()
         handleCancel()

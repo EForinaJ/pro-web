@@ -12,3 +12,10 @@ export function fetchPostDistributeCreate(data: Distribute.Params.Model) {
     data
   })
 }
+
+export function fetchPostDistributeCancel(data: Distribute.Params.Cancel) {
+  return request.post({
+    url: '/distribute/cancel',
+    data
+  })
+}

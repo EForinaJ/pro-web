@@ -39,3 +39,11 @@ export function fetchGetOrderDetail(params: {id:number}) {
     params
   })
 }
+
+export function fetchPostOrderDelete(data: {ids:number[]}) {
+  return request.post({
+    url: '/order/delete',
+    data
+  })
+}
+

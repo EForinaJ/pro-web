@@ -10,6 +10,10 @@ declare namespace Distribute {
             witkeyId?: number| null;
             code: string | null;
         }
+        interface Cancel {
+            id?: number| null;
+            reason: string | null;
+        }
     }
     namespace Response {
        
@@ -20,6 +24,7 @@ declare namespace Distribute {
             witkey:string;
             game:string;
             title:string;
+            reason:string;
             isCancel:number;
             createTime:string;
         }

@@ -1,19 +1,20 @@
 <template>
     <ElDialog
-      title="添加优惠"
-      width="20%"
+      title="取消派单"
+      width="25%"
       :model-value="visible"
       align-center
       @update:model-value="handleCancel"
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem  prop="money">
-            <ElInputNumber 
-            :precision="2"
-            style="width: 100%;"
-            v-model="form.money" placeholder="请输入优惠金额" controls-position="right"/>
-            折扣优惠将平摊到商品中
+        <ElFormItem label="取消原因" prop="reason">
+            <ElInput
+            v-model="form.reason"
+            type="textarea"
+            :rows="3"
+            placeholder="请输入取消原因"
+          />
         </ElFormItem>
       </ElForm>
       <template #footer>
@@ -24,7 +25,8 @@
   </template>
   
 <script setup lang="ts">
-import { fetchPostOrderAddDiscount } from '@/api/order';
+
+import { fetchPostDistributeCancel } from '@/api/distribute';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -57,17 +59,17 @@ const visible = computed({
 /**
  * 表单数据
  */
- const form = reactive<Order.Params.AddDiscount>({
+const form = reactive<Distribute.Params.Cancel>({
     id: 0, // 权限ID
-    money: null,
+    reason: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    money: [
-        { required: true, message: '请输入优惠金额', trigger: 'blur' },
+    reason: [
+        { required: true, message: '请输入取消原因', trigger: 'blur' },
     ],
 })
 
@@ -88,8 +90,8 @@ watch(
  */
 const initForm = async () => {
     Object.assign(form, {
-        id: props.id!, // 权限ID
-        money: null
+        id: props.id!,
+        money: 0,
     })
 }
 
@@ -117,8 +119,9 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostOrderAddDiscount(form)
-        ElMessage.success('更新成功')
+        await fetchPostDistributeCancel(form)
+
+        ElMessage.success('取消成功')
         emit('submit')
         handleClose()
         handleCancel()

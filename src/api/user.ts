@@ -85,14 +85,3 @@ export function fetchGetUserRechargeList(params: {
   })
 }
 
-export function fetchGetUserLogs(params: {
-  id: number,
-  page: number,
-  limit: number
-}) {
-  return request.get<User.Response.Logs>({
-    url: '/user/logs',
-    params
-  })
-}
-

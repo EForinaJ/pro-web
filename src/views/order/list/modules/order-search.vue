@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { UserStatus } from '@/enums/statusEnum';
+import { OrderStatus, UserStatus } from '@/enums/statusEnum';
 
   interface Props {
     modelValue: Record<string, any>
@@ -36,6 +36,7 @@ import { UserStatus } from '@/enums/statusEnum';
     // userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
   }
 
+
   // 动态 options
   const statusOptions = ref<{ label: string; value: number; disabled?: boolean }[]>([])
 
@@ -44,8 +45,12 @@ import { UserStatus } from '@/enums/statusEnum';
     return new Promise((resolve) => {
       setTimeout(() => {
         resolve([
-          { label: '启用', value: UserStatus.Enable },
-          { label: '禁用', value: UserStatus.Disable },
+          { label: '待支付', value: OrderStatus.PendingPayment },
+          { label: '待服务', value: OrderStatus.PendingService },
+          { label: '进行中', value: OrderStatus.InProgress },
+          { label: '已完成', value: OrderStatus.Completed },
+          { label: '已取消', value: OrderStatus.Cancel },
+          { label: '已退款', value: OrderStatus.Refund },
         ])
       }, 1000)
     })
@@ -58,17 +63,11 @@ import { UserStatus } from '@/enums/statusEnum';
   // 表单配置
   const formItems = computed(() => [
     {
-      label: '用户名',
-      key: 'name',
+      label: '订单号',
+      key: 'code',
       type: 'input',
-      placeholder: '请输入用户名',
+      placeholder: '请输入订单号',
       clearable: true
-    },
-    {
-      label: '手机号',
-      key: 'phone',
-      type: 'input',
-      props: { placeholder: '请输入手机号', maxlength: '11' }
     },
     {
       label: '状态',

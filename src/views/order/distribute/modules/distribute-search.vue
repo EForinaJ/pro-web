@@ -11,8 +11,6 @@
 </template>
 
 <script setup lang="ts">
-import { UserStatus } from '@/enums/statusEnum';
-
   interface Props {
     modelValue: Record<string, any>
   }
@@ -33,51 +31,28 @@ import { UserStatus } from '@/enums/statusEnum';
 
   // 校验规则
   const rules = {
-    // userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
+    // distributeName: [{ required: true, message: '请输入用户名', trigger: 'blur' }]
   }
 
-  // 动态 options
-  const statusOptions = ref<{ label: string; value: number; disabled?: boolean }[]>([])
-
-  // 模拟接口返回状态数据
-  function fetchStatusOptions(): Promise<typeof statusOptions.value> {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve([
-          { label: '启用', value: UserStatus.Enable },
-          { label: '禁用', value: UserStatus.Disable },
-        ])
-      }, 1000)
-    })
-  }
 
   onMounted(async () => {
-    statusOptions.value = await fetchStatusOptions()
+
   })
 
   // 表单配置
   const formItems = computed(() => [
     {
-      label: '用户名',
+      label: '接单者',
       key: 'name',
       type: 'input',
-      placeholder: '请输入用户名',
+      placeholder: '请输入接单者名称',
       clearable: true
     },
     {
-      label: '手机号',
-      key: 'phone',
+      label: '订单号',
+      key: 'code',
       type: 'input',
-      props: { placeholder: '请输入手机号', maxlength: '11' }
-    },
-    {
-      label: '状态',
-      key: 'status',
-      type: 'select',
-      props: {
-        placeholder: '请选择状态',
-        options: statusOptions.value
-      }
+      props: { placeholder: '请输入订单号' }
     },
   ])
 

@@ -120,7 +120,7 @@ const handleSubmit = async () => {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
         await fetchPostDistributeCreate(form)
-        ElMessage.success('更新成功')
+        ElMessage.success('派发成功')
         emit('submit')
         handleClose()
         handleCancel()

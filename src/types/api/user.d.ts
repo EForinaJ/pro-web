@@ -106,14 +106,5 @@ declare namespace User {
             status:number;
             createTime: string;
         }>
-        type Logs = Api.Common.PaginatedResponse<{
-            id: number;
-            name: string;
-            createTime: number;
-            content: string;
-            mode: number;
-            status:number;
-            createTime: string;
-        }>
     }
 }
