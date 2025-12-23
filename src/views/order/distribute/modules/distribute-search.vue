@@ -42,10 +42,10 @@
   // 表单配置
   const formItems = computed(() => [
     {
-      label: '接单者',
+      label: '接单威客',
       key: 'name',
       type: 'input',
-      placeholder: '请输入接单者名称',
+      placeholder: '请输入接单威客名称',
       clearable: true
     },
     {

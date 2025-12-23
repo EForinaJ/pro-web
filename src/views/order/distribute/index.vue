@@ -53,7 +53,6 @@
 <script setup lang="ts">
 import { useTable } from '@/hooks/core/useTable'
 import { ElTag, ElMessageBox } from 'element-plus'
-import { useSiteStore } from '@/store/modules/site'
 import { useAuth } from '@/hooks'
 import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
 import DistributeModal from './modules/distribute-modal.vue'
@@ -66,11 +65,9 @@ defineOptions({ name: 'Distribute' })
 
 
 // 弹窗相关
-const viewModalVisible = ref(false)
 const cancelModalVisible = ref(false)
 const distributeModalVisible = ref(false)
 const id = ref<number>(0)
-const reason = ref<string>("")
 // 选中行
 const selectedRows = ref<number[]>([])
 

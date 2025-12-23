@@ -1,4 +1,4 @@
-declare namespace Distribute {
+declare namespace Settlement {
     namespace Params {
         type Query = {
             page: number;
@@ -22,13 +22,27 @@ declare namespace Distribute {
             code:string;
             manage: string;
             witkey:string;
-            game:string;
-            title:string;
-            reason:string;
-            isCancel:number;
+            amount:number;
+            status:number;
             createTime:string;
         }
         type List = Api.Common.PaginatedResponse<Info>
+
+        type Detail = {
+            id: number;
+            code:string;
+            manage: string;
+            witkey:string;
+            type:number;
+            amount:number;
+            commission:number;
+            deduction:number;
+            serviceCharge:number;
+            status:number;
+            remark:string;
+            settlementTime:string;
+            createTime:string;
+        }
 
     }
 }

@@ -254,7 +254,7 @@ const {
             },{
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
@@ -268,7 +268,7 @@ const {
             },{
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
@@ -282,7 +282,7 @@ const {
             },{
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
@@ -296,7 +296,7 @@ const {
             },{
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
@@ -305,7 +305,7 @@ const {
             btnList.push({
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
@@ -314,7 +314,7 @@ const {
             btnList.push({
               key: 'delete',
               label: '删除订单',
-              icon: 'ep:element-plus',
+              icon: 'ri:delete-bin-4-line',
               auth:'delete'
             })
           }
