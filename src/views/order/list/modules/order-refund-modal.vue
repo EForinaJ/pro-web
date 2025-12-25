@@ -8,6 +8,13 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
+        <ElFormItem label="退款类型" prop="type">
+            <ElRadioGroup  v-model="form.type">
+                <ElRadio :value="AfterSalesType.Cheater">开挂作弊</ElRadio>
+                <ElRadio :value="AfterSalesType.ServiceNotCompleted">炸单</ElRadio>
+                <ElRadio :value="AfterSalesType.Other">其他</ElRadio>
+            </ElRadioGroup>
+        </ElFormItem>
         <ElFormItem label="退款金额" prop="money">
             <ElInputNumber 
             :precision="2"
@@ -34,6 +41,7 @@
   
 <script setup lang="ts">
 import { fetchPostOrderRefund } from '@/api/order';
+import { AfterSalesType } from '@/enums/typeEnum';
 import type { FormInstance, FormRules } from 'element-plus'
 
 
@@ -68,6 +76,7 @@ const visible = computed({
  */
 const form = reactive<Order.Params.Refund>({
     id: 0, // 权限ID
+    type: AfterSalesType.ServiceNotCompleted,
     money: null,
     reason: null,
 })
@@ -76,8 +85,14 @@ const form = reactive<Order.Params.Refund>({
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
+    type: [
+        { required: true, message: '请选择退款类型', trigger: 'blur' },
+    ],
     money: [
-        { required: true, message: '请输入预存充值', trigger: 'blur' },
+        { required: true, message: '请输入退款金额', trigger: 'blur' },
+    ],
+    reason: [
+        { required: true, message: '请输入退款原因', trigger: 'blur' },
     ],
 })
 

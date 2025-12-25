@@ -11,10 +11,18 @@ export enum ChangeBalanceType {
 
 export enum ChangeCommissionType {
   WitkeyChangeBalanceTypeSystem = 1,      // 系统变更
+  WitkeyChangeBalanceTypeSettlement = 2,      // 报单结算
 }
 
 export enum RechargePayType {
   AlyPay = 1,      // 支付宝
   Wechat = 2,      // 微信
   Manual = 3,      // 客服预存
+}
+
+
+export enum AfterSalesType {
+  ServiceNotCompleted = 1,      // 服务无法完成
+  Cheater = 2,      // 威客作弊
+  Other = 3,      // 其他
 }

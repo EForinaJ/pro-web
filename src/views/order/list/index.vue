@@ -62,7 +62,7 @@ import { useAuth } from '@/hooks'
 import { ButtonMoreItem } from '@/components/core/forms/art-button-more/index.vue'
 import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
 import ArtButtonMore from '@/components/core/forms/art-button-more/index.vue'
-import { fetchGetOrderList, fetchPostOrderCancel, fetchPostOrderDelete, fetchPostOrderPaid } from '@/api/order'
+import { fetchGetOrderList, fetchPostOrderCancel, fetchPostOrderComplete, fetchPostOrderDelete, fetchPostOrderPaid, fetchPostOrderStart } from '@/api/order'
 import { OrderStatus} from '@/enums/statusEnum'
 import OrderAddDiscountModal from './modules/order-add-discount-modal.vue'
 import { PayMode } from '@/enums/modeEnum'
@@ -261,6 +261,11 @@ const {
 
           if (row.status == OrderStatus.PendingService) {
             btnList.push({
+              key: 'start',
+              label: '开始服务',
+              icon: 'solar:stars-minimalistic-bold',
+              auth:'start'
+            },{
               key: 'refund',
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
@@ -275,6 +280,11 @@ const {
 
           if (row.status == OrderStatus.InProgress) {
             btnList.push({
+              key: 'complete',
+              label: '完成订单',
+              icon: 'solar:traffic-economy-bold',
+              auth:'complete'
+            },{
               key: 'refund',
               label: '立即退款',
               icon: 'solar:electric-refueling-bold',
@@ -352,11 +362,17 @@ const buttonMoreClick = (item: ButtonMoreItem, row: Order.Response.Info) => {
     case 'paid':
       handlePaid(row)
       break
+    case 'start':
+      handleStart(row)
+      break
     case 'cancel':
       handleCancel(row)
       break
     case 'refund':
       handleRefund(row)
+      break
+    case 'complete':
+      handleComplete(row)
       break
     case 'delete':
       handleDelete(row)
@@ -406,7 +422,7 @@ const handlePaid = (row:Order.Response.Info): void => {
     refreshData()
   })
   .catch(() => {
-    ElMessage.info('已取消支付')
+    ElMessage.info('已取消')
   })
 }
 const handleCancel = (row:Order.Response.Info): void => {
@@ -420,10 +436,39 @@ const handleCancel = (row:Order.Response.Info): void => {
     refreshData()
   })
   .catch(() => {
-    ElMessage.info('已取消支付')
+    ElMessage.info('已取消')
   })
 }
 
+const handleStart = (row:Order.Response.Info): void => {
+  ElMessageBox.confirm(`确定要开始服务吗？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'primary'
+  }).then(async() => {
+    // TODO: 调用删除接口
+    await fetchPostOrderStart({id:row.id})
+    refreshData()
+  })
+  .catch(() => {
+    ElMessage.info('已取消')
+  })
+}
+
+const handleComplete = (row:Order.Response.Info): void => {
+  ElMessageBox.confirm(`确定服务完成吗？`, '提示', {
+    confirmButtonText: '确定',
+    cancelButtonText: '取消',
+    type: 'primary'
+  }).then(async() => {
+    // TODO: 调用删除接口
+    await fetchPostOrderComplete({id:row.id})
+    refreshData()
+  })
+  .catch(() => {
+    ElMessage.info('已取消')
+  })
+}
 
 
 

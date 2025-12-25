@@ -26,6 +26,18 @@ export function fetchPostOrderCancel(data:{id:number}) {
     data
   })
 }
+export function fetchPostOrderStart(data:{id:number}) {
+  return request.post({
+    url: '/order/start',
+    data
+  })
+}
+export function fetchPostOrderComplete(data:{id:number}) {
+  return request.post({
+    url: '/order/complete',
+    data
+  })
+}
 export function fetchPostOrderRefund(data:Order.Params.Refund) {
   return request.post({
     url: '/order/refund',

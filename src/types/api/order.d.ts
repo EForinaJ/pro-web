@@ -12,6 +12,7 @@ declare namespace Order {
         }
         type Refund = {
             id: number;
+            type: number;
             money: number | null;
             reason: string | null;
         }

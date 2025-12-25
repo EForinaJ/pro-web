@@ -6,12 +6,9 @@ declare namespace Settlement {
             name?: string;
             code?: string;
         }
-        interface Model {
-            witkeyId?: number| null;
-            code: string | null;
-        }
-        interface Cancel {
+        interface Apply {
             id?: number| null;
+            status: number;
             reason: string | null;
         }
     }
@@ -33,14 +30,12 @@ declare namespace Settlement {
             code:string;
             manage: string;
             witkey:string;
-            type:number;
             amount:number;
             commission:number;
-            deduction:number;
             serviceCharge:number;
             status:number;
-            remark:string;
-            settlementTime:string;
+            reason:string;
+            images:string[];
             createTime:string;
         }
 

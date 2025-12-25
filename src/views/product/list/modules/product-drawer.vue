@@ -59,7 +59,14 @@
           :precision="0"
           style="width: 100%;"
           v-model="formData.witkeyCount" placeholder="请输入服务人数"
-          controls-position="right"></ElInputNumber>
+          controls-position="right"/>
+      </ElFormItem>
+      <ElFormItem label="限购次数" prop="purchaseLimit">
+        <ElInputNumber 
+          :precision="0"
+          style="width: 100%;"
+          v-model="formData.purchaseLimit" placeholder="请输入限购次数"
+          controls-position="right"/>
       </ElFormItem>
       <ElFormItem label="销售数量" prop="salesCount">
         <ElInputNumber 
@@ -239,6 +246,7 @@ const formData = reactive<Product.Params.Model>({
   price: null,
   rate:  0,
   witkeyCount:  null,
+  purchaseLimit:  null,
   salesCount:  null,
   categoryId: null,
   unit: null,

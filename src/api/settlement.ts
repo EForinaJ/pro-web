@@ -13,3 +13,10 @@ export function fetchGetSettlementDetail(params: {id:number}) {
     params
   })
 }
+
+export function fetchPostSettlementApply(data: Settlement.Params.Apply) {
+  return request.post({
+    url: '/settlement/apply',
+    data
+  })
+}

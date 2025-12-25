@@ -53,6 +53,7 @@ const {
                 formatter: (row) => {
                     const label: Record<number, string> = {
                         [ChangeCommissionType.WitkeyChangeBalanceTypeSystem]: '系统变更佣金',
+                        [ChangeCommissionType.WitkeyChangeBalanceTypeSettlement]: '报单结算',
                     };
                     return h(ElTag, { 
                         type: "primary"
@@ -82,7 +83,7 @@ const {
                 label: '当前余额',
                 formatter: (row) => {
                     return  h('div', { class: 'witkey flex-c gap-2' }, [
-                        h('span', { class: 'text-sm' }, row.before + site.symbol!),
+                        h('span', { class: 'text-sm' }, row.after + site.symbol!),
                     ])
                 }
             },

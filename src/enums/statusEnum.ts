@@ -1,3 +1,8 @@
+export enum ApplyStatus {
+    Pending = 1, // 待审核
+    Success = 2, // 已通过
+    Fail = 3, // 拒绝
+}
 export enum ManageStatus {
     Disable = 1, // 禁用
     Enable = 2, // 启用

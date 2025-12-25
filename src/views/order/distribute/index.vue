@@ -176,13 +176,13 @@ const {
         formatter: (row) =>{
           return h('div', { class: 'distribute flex-c' }, [
             (hasAuth("view") && h(ArtButtonTable, {
+              type: 'view',
+              onClick: () => handleView(row)
+            })),
+            (hasAuth("view") && h(ArtButtonTable, {
               icon: 'solar:close-circle-bold',
               type: 'delete',
               onClick: () => handleCancel(row)
-            })),
-            (hasAuth("view") && h(ArtButtonTable, {
-              type: 'view',
-              onClick: () => handleView(row)
             })),
           ])
         }

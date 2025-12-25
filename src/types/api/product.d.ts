@@ -15,6 +15,7 @@ declare namespace Product {
             price: number | null;
             rate: number;
             witkeyCount: number | null;
+            purchaseLimit: number | null;
             salesCount: number | null;
             categoryId: number |null;
             unit: string | null;
