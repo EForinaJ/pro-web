@@ -1,10 +1,10 @@
-declare namespace Settlement {
+declare namespace Aftersales {
     namespace Params {
         type Query = {
             page: number;
             limit: number;
-            name?: string;
             code?: string;
+            orderCode?: string;
         }
         interface Apply {
             id?: number| null;
@@ -18,7 +18,13 @@ declare namespace Settlement {
             id: number;
             code:string;
             orderCode:string;
-            witkey:string;
+            product:{
+                id:number;
+                name:string;
+                category:string;
+                pic:string
+            };
+            user:string;
             amount:number;
             status:number;
             createTime:string;
@@ -28,6 +34,11 @@ declare namespace Settlement {
         type Detail = {
             id: number;
             code:string;
+            manage: string;
+            amount:number;
+            type:number;
+            reason:string;
+            status:number;
             order:{
                 id: number;
                 code:string;
@@ -59,14 +70,6 @@ declare namespace Settlement {
                 finishTime:string | null;
                 requirements:string | null;
             };
-            manage: string;
-            witkey:string;
-            amount:number;
-            commission:number;
-            serviceCharge:number;
-            status:number;
-            reason:string;
-            images:string[];
             createTime:string;
         }
 

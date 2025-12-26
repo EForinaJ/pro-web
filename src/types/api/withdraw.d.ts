@@ -1,4 +1,4 @@
-declare namespace Settlement {
+declare namespace Withdraw {
     namespace Params {
         type Query = {
             page: number;
@@ -17,11 +17,14 @@ declare namespace Settlement {
         type Info = {
             id: number;
             code:string;
-            orderCode:string;
             witkey:string;
+            type:number;
             amount:number;
+            serviceFee:number;
+            settledAmount:number;
             status:number;
             createTime:string;
+
         }
         type List = Api.Common.PaginatedResponse<Info>
 

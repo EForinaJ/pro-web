@@ -39,8 +39,8 @@
         :id="id"
         @submit="refreshData"
       />
-      <SettlementViewModal
-        v-model:visible="viewModalVisible"
+      <SettlementViewDrawer
+        v-model="viewVisible"
         :id="id"
         @submit="refreshData"
       />
@@ -58,8 +58,9 @@ import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
 import { fetchGetSettlementList } from '@/api/settlement'
 import SettlementApplyModal from './modules/settlement-apply-modal.vue'
 import SettlementSearch from './modules/settlement-search.vue'
-import SettlementViewModal from './modules/settlement-view-modal.vue'
+
 import { ApplyStatus } from '@/enums/statusEnum'
+import SettlementViewDrawer from './modules/settlement-view-drawer.vue'
 
 
 const { hasAuth } = useAuth();
@@ -69,7 +70,7 @@ const {getInfo:site} = useSiteStore()
 // 弹窗相关
 
 const applyModalVisible = ref(false)
-const viewModalVisible = ref(false)
+const viewVisible = ref(false)
 const id = ref<number>(0)
 
 // 选中行
@@ -126,15 +127,14 @@ const {
       { type: 'selection' }, // 勾选列
       { prop: 'id', width: 60, label: 'ID' }, // 序号
       {
-        prop: 'code',
-        label: '订单号',
-        width: 220,
-      },
-      {
-        prop: 'manage',
-        label: '审核人',
+        prop: 'settlementInfo',
+        label: '售后编号',
+        width: 280,
         formatter: (row) => {
-          return h('p', { }, row.manage)
+          return h('div', {  }, [
+              h('p', { }, `报单号:${row.code}`),
+              h('p', { }, `订单号:${row.orderCode}`),
+            ])
         }
       },
       {
@@ -175,7 +175,7 @@ const {
               type: 'view',
               onClick: () => handleView(row)
             })),
-            h(ArtButtonMore, {
+            ((row.status == ApplyStatus.Pending) && h(ArtButtonMore, {
               list: [{
                   key: 'apply',
                   label: '审核报单',
@@ -189,7 +189,7 @@ const {
                 },
               ],
               onClick: (item: ButtonMoreItem) => buttonMoreClick(item, row)
-            })
+            })),
           ])
         }
       }
@@ -231,7 +231,7 @@ const handleSearch = (params: Record<string, any>) => {
 const handleView = (row:Settlement.Response.Info) => {
   id.value = row.id
   nextTick(() => {
-    viewModalVisible.value = true
+    viewVisible.value = true
   })
 }
 

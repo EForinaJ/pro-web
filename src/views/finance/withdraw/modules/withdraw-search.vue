@@ -42,17 +42,17 @@
   // 表单配置
   const formItems = computed(() => [
     {
-      label: '报单威客',
+      label: '提现威客',
       key: 'name',
       type: 'input',
-      placeholder: '请输入报单威客名称',
+      placeholder: '请输入威客名称',
       clearable: true
     },
     {
-      label: '订单号',
+      label: '提现号',
       key: 'code',
       type: 'input',
-      props: { placeholder: '请输入订单号' }
+      props: { placeholder: '请输入提现号' }
     },
   ])
 

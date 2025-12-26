@@ -1,12 +1,12 @@
-<!-- 结算管理页面 -->
+<!-- 退款管理页面 -->
 <!-- art-full-height 自动计算出页面剩余高度 -->
 <!-- art-table-card 一个符合系统样式的 class，同时自动撑满剩余高度 -->
 <!-- 更多 useTable 使用示例请移步至 功能示例 下面的高级表格示例或者查看官方文档 -->
 <!-- useTable 文档：https://www.artd.pro/docs/zh/guide/hooks/use-table.html -->
 <template>
-  <div class="settlement-page art-full-height">
+  <div class="aftersales-page art-full-height">
     <!-- 搜索栏 -->
-    <SettlementSearch v-model="searchForm" @search="handleSearch" @reset="resetSearchParams"></SettlementSearch>
+    <AftersalesSearch v-model="searchForm" @search="handleSearch" @reset="resetSearchParams"></AftersalesSearch>
 
     <ElCard class="art-table-card" shadow="never">
       <!-- 表格头部 -->
@@ -34,13 +34,13 @@
       </ArtTable>
 
 
-      <SettlementApplyModal
+      <AftersalesApplyModal
         v-model:visible="applyModalVisible"
         :id="id"
         @submit="refreshData"
       />
-      <SettlementViewModal
-        v-model:visible="viewModalVisible"
+      <AftersalesViewDrawer
+        v-model="viewVisible"
         :id="id"
         @submit="refreshData"
       />
@@ -50,26 +50,26 @@
 
 <script setup lang="ts">
 import { useTable } from '@/hooks/core/useTable'
-import { ElTag, ElMessageBox } from 'element-plus'
+import { ElTag, ElMessageBox, ElImage } from 'element-plus'
 import { useSiteStore } from '@/store/modules/site'
 import { useAuth } from '@/hooks'
 import ArtButtonMore, { ButtonMoreItem } from '@/components/core/forms/art-button-more/index.vue'
 import ArtButtonTable from '@/components/core/forms/art-button-table/index.vue'
-import { fetchGetSettlementList } from '@/api/settlement'
-import SettlementApplyModal from './modules/settlement-apply-modal.vue'
-import SettlementSearch from './modules/settlement-search.vue'
-import SettlementViewModal from './modules/settlement-view-modal.vue'
+import { fetchGetAftersalesList } from '@/api/aftersales'
+import AftersalesApplyModal from './modules/aftersales-apply-modal.vue'
+import AftersalesSearch from './modules/aftersales-search.vue'
 import { ApplyStatus } from '@/enums/statusEnum'
+import AftersalesViewDrawer from './modules/aftersales-view-drawer.vue'
 
 
 const { hasAuth } = useAuth();
-defineOptions({ name: 'Settlement' })
+defineOptions({ name: 'Aftersales' })
 
 const {getInfo:site} = useSiteStore()
 // 弹窗相关
 
 const applyModalVisible = ref(false)
-const viewModalVisible = ref(false)
+const viewVisible = ref(false)
 const id = ref<number>(0)
 
 // 选中行
@@ -84,7 +84,7 @@ const searchForm = ref({
 
 
 
-const SETTLEMENT_STATUS = {
+const AFTERSALES_STATUS = {
   [ApplyStatus.Pending]: { type: 'primary' as const, text: '待审核' },
   [ApplyStatus.Success]: { type: 'success' as const, text: '已通过' },
   [ApplyStatus.Fail]: { type: 'danger' as const, text: '拒绝' },
@@ -92,7 +92,7 @@ const SETTLEMENT_STATUS = {
 
 const getStatus = (status: number) => {
   return (
-    SETTLEMENT_STATUS[status as keyof typeof SETTLEMENT_STATUS] || {
+    AFTERSALES_STATUS[status as keyof typeof AFTERSALES_STATUS] || {
       type: 'info' as const,
       text: '未知'
     }
@@ -113,10 +113,10 @@ const {
 } = useTable({
   // 核心配置
   core: {
-    apiFn: fetchGetSettlementList,
+    apiFn: fetchGetAftersalesList,
     apiParams:{
       code: "",
-      name: "",
+      orderCode: "",
     },
     paginationKey:{
       current: 'page', 
@@ -124,36 +124,54 @@ const {
     },
     columnsFactory: () => [
       { type: 'selection' }, // 勾选列
-      { prop: 'id', width: 60, label: 'ID' }, // 序号
+      // { prop: 'id', width: 60, label: 'ID' }, // 序号
       {
-        prop: 'code',
-        label: '订单号',
-        width: 220,
-      },
-      {
-        prop: 'manage',
-        label: '审核人',
+        prop: 'afterInfo',
+        label: '售后编号',
+        width: 280,
         formatter: (row) => {
-          return h('p', { }, row.manage)
+          return h('div', {  }, [
+              h('p', { }, `售后号:${row.code}`),
+              h('p', { }, `订单号:${row.orderCode}`),
+            ])
         }
       },
       {
-        prop: 'witkey',
-        label: '报单者',
+        prop: 'productInfo',
+        label: '商品信息',
+        width: 220,
         formatter: (row) => {
-          return h('p', { }, row.witkey)
+          return h('div', { class: 'flex-c' }, [
+            h(ElImage, {
+              class: 'size-12 rounded-md',
+              src: row.product.pic,
+              previewSrcList: [row.product.pic],
+              // 图片预览是否插入至 body 元素上，用于解决表格内部图片预览样式异常
+              previewTeleported: true
+            }),
+            h('div', { class: 'ml-2 flex-1' }, [
+              h('p', { class: 'line-clamp-1' }, row.product.name),
+            ])
+          ])
+        }
+      },
+      {
+        prop: 'user',
+        label: '申请人',
+        formatter: (row) => {
+          return h('p', { }, row.user)
         }
       },
       {
         prop: 'amount',
-        label: '结算金额',
+        label: '退款金额',
         formatter: (row) => {
           return h(ElTag, { type:"primary" }, () => `${row.amount}${site.symbol}` )
         }
       },
       {
         prop: 'status',
-        label: '结算状态',
+        label: '退款状态',
         formatter: (row) => {
           const statusConfig = getStatus(row.status)
           return h(ElTag, { type: statusConfig.type }, () => statusConfig.text)
@@ -170,26 +188,21 @@ const {
         width: 120,
         fixed: 'right', // 固定列
         formatter: (row) =>{
-          return h('div', { class: 'settlement flex-c' }, [
+          return h('div', { class: 'aftersales flex-c' }, [
             (hasAuth("view") && h(ArtButtonTable, {
               type: 'view',
               onClick: () => handleView(row)
             })),
-            h(ArtButtonMore, {
+            ((row.status == ApplyStatus.Pending) && h(ArtButtonMore, {
               list: [{
                   key: 'apply',
-                  label: '审核报单',
+                  label: '审核售后',
                   icon: 'ep:element-plus',
                   auth:'apply'
-                },{
-                  key: 'delete',
-                  label: '删除订单',
-                  icon: 'ri:delete-bin-4-line',
-                  auth:'delete'
-                },
+                }
               ],
               onClick: (item: ButtonMoreItem) => buttonMoreClick(item, row)
-            })
+            })),
           ])
         }
       }
@@ -206,7 +219,7 @@ const {
   },
 })
 
-const buttonMoreClick = (item: ButtonMoreItem, row: Settlement.Response.Info) => {
+const buttonMoreClick = (item: ButtonMoreItem, row: Aftersales.Response.Info) => {
   switch (item.key) {
     case 'apply':
       handleApply(row)
@@ -228,14 +241,14 @@ const handleSearch = (params: Record<string, any>) => {
   getData()
 }
 
-const handleView = (row:Settlement.Response.Info) => {
+const handleView = (row:Aftersales.Response.Info) => {
   id.value = row.id
   nextTick(() => {
-    viewModalVisible.value = true
+    viewVisible.value = true
   })
 }
 
-const handleApply = (row:Settlement.Response.Info) => {
+const handleApply = (row:Aftersales.Response.Info) => {
   id.value = row.id
   nextTick(() => {
     applyModalVisible.value = true
@@ -245,14 +258,14 @@ const handleApply = (row:Settlement.Response.Info) => {
 
 const handleBatchDelete = () =>{
   if (selectedRows.value.length != 0) {
-    ElMessageBox.confirm(`确定要删除该吗？`, '删除结算', {
+    ElMessageBox.confirm(`确定要删除该吗？`, '删除退款', {
       confirmButtonText: '确定',
       cancelButtonText: '取消',
       type: 'error'
     }).then(async() => {
       // TODO: 调用删除接口
       ElMessage.success('删除成功')
-      // await fetchPostSettlementDelete({ids:selectedRows.value})
+      // await fetchPostAftersalesDelete({ids:selectedRows.value})
       refreshData()
     })
     .catch(() => {
@@ -262,15 +275,15 @@ const handleBatchDelete = () =>{
 }
 
 
-const handleDelete = async (row: Settlement.Response.Info): Promise<void> => {
-  ElMessageBox.confirm(`确定要删除该吗？`, '删除结算', {
+const handleDelete = async (row: Aftersales.Response.Info): Promise<void> => {
+  ElMessageBox.confirm(`确定要删除该吗？`, '删除退款', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'error'
   }).then(async() => {
     // TODO: 调用删除接口
     ElMessage.success('删除成功')
-    // await fetchPostSettlementDelete({ids:[row.id]})
+    // await fetchPostAftersalesDelete({ids:[row.id]})
     refreshData()
   })
   .catch(() => {
@@ -282,7 +295,7 @@ const handleDelete = async (row: Settlement.Response.Info): Promise<void> => {
 /**
  * 处理表格行选择变化
  */
-const handleSelectionChange = (selection: Settlement.Response.Info[]): void => {
+const handleSelectionChange = (selection: Aftersales.Response.Info[]): void => {
   selectedRows.value = selection.map((item)=>item.id)
 }
 </script>
