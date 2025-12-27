@@ -26,3 +26,15 @@ export enum AfterSalesType {
   Cheater = 2,      // 威客作弊
   Other = 3,      // 其他
 }
+
+export enum PayMode {
+  AlyPay = 1,// 支付宝
+  Wechat = 2,// 微信
+  Balance = 3,// 余额
+  PersonalTransfer = 4,// 人工转账
+}
+
+export enum WithdrawType {
+  AlyPay = 1,      // 支付宝
+  Wechat = 2,      // 微信
+}

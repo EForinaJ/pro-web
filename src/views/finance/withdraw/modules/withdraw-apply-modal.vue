@@ -1,6 +1,6 @@
 <template>
     <ElDialog
-      title="审核结算"
+      title="审核提现"
       width="25%"
       :model-value="visible"
       align-center
@@ -8,10 +8,10 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem label="结算类型" prop="status">
+        <ElFormItem label="提现类型" prop="status">
             <ElRadioGroup  v-model="form.status">
-                <ElRadio :value="ApplyStatus.Success">立即结算</ElRadio>
-                <ElRadio :value="ApplyStatus.Fail">拒绝结算</ElRadio>
+                <ElRadio :value="ApplyStatus.Success">同意提现</ElRadio>
+                <ElRadio :value="ApplyStatus.Fail">拒绝提现</ElRadio>
             </ElRadioGroup>
         </ElFormItem>
         <ElFormItem v-if="form.status == ApplyStatus.Fail" label="拒绝原因" prop="reason">
@@ -32,7 +32,7 @@
   
 <script setup lang="ts">
 
-import { fetchPostSettlementApply } from '@/api/settlement';
+import { fetchPostWithdrawApply } from '@/api/withdraw';
 import { ApplyStatus } from '@/enums/statusEnum';
 import type { FormInstance, FormRules } from 'element-plus'
 
@@ -66,7 +66,7 @@ const visible = computed({
 /**
  * 表单数据
  */
-const form = reactive<Settlement.Params.Apply>({
+const form = reactive<Withdraw.Params.Apply>({
     id: 0, // 权限ID
     status: ApplyStatus.Success,
     reason: null,
@@ -75,7 +75,7 @@ const form = reactive<Settlement.Params.Apply>({
 
 const rules = reactive<FormRules>({
     status: [
-        { required: true, message: '请选择结算类型', trigger: 'blur' },
+        { required: true, message: '请选择提现类型', trigger: 'blur' },
     ],
     reason: [
         {
@@ -143,7 +143,7 @@ const handleSubmit = async () => {
     try {
         await formRef.value.validate()
         // TODO: 调用新增/编辑接口
-        await fetchPostSettlementApply(form)
+        await fetchPostWithdrawApply(form)
 
         ElMessage.success('审核成功')
         emit('submit')
