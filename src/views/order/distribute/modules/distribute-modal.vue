@@ -91,7 +91,6 @@ watch(
 const initForm = async () => {
     Object.assign(form, {
         id: props.id!, // 权限ID
-        money: null
     })
 }
 

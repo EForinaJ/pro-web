@@ -14,12 +14,13 @@ export enum ChangeCommissionType {
   WitkeyChangeBalanceTypeSettlement = 2,      // 报单结算
 }
 
-export enum RechargePayType {
-  AlyPay = 1,      // 支付宝
-  Wechat = 2,      // 微信
-  Manual = 3,      // 客服预存
-}
 
+export enum CpitalType {
+  PaymentOrder = 1,// 支付订单
+  RefundOrder = 2,// 订单退款
+  PaymentRecharge = 3,// 充值余额
+  WithdrawCommission = 4,// 佣金提现
+}
 
 export enum AfterSalesType {
   ServiceNotCompleted = 1,      // 服务无法完成
@@ -27,14 +28,9 @@ export enum AfterSalesType {
   Other = 3,      // 其他
 }
 
-export enum PayMode {
-  AlyPay = 1,// 支付宝
-  Wechat = 2,// 微信
-  Balance = 3,// 余额
-  PersonalTransfer = 4,// 人工转账
-}
-
 export enum WithdrawType {
   AlyPay = 1,      // 支付宝
   Wechat = 2,      // 微信
 }
+
+

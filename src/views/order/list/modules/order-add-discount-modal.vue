@@ -8,11 +8,11 @@
       @close="handleClose"
     >
       <ElForm ref="formRef" :model="form" :rules="rules" label-width="auto">
-        <ElFormItem  prop="money">
+        <ElFormItem  prop="amount">
             <ElInputNumber 
             :precision="2"
             style="width: 100%;"
-            v-model="form.money" placeholder="请输入优惠金额" controls-position="right"/>
+            v-model="form.amount" placeholder="请输入优惠金额" controls-position="right"/>
             折扣优惠将平摊到商品中
         </ElFormItem>
       </ElForm>
@@ -59,14 +59,14 @@ const visible = computed({
  */
  const form = reactive<Order.Params.AddDiscount>({
     id: 0, // 权限ID
-    money: null,
+    amount: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    money: [
+    amount: [
         { required: true, message: '请输入优惠金额', trigger: 'blur' },
     ],
 })
@@ -89,7 +89,7 @@ watch(
 const initForm = async () => {
     Object.assign(form, {
         id: props.id!, // 权限ID
-        money: null
+        amount: null
     })
 }
 

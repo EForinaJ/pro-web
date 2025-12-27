@@ -8,12 +8,12 @@ declare namespace Order {
         }
         type AddDiscount = {
             id: number;
-            money?: number | null;
+            amount?: number | null;
         }
         type Refund = {
             id: number;
             type: number;
-            money: number | null;
+            amount: number | null;
             reason: string | null;
         }
     }

@@ -15,11 +15,11 @@
                 <ElRadio :value="AfterSalesType.Other">其他</ElRadio>
             </ElRadioGroup>
         </ElFormItem>
-        <ElFormItem label="退款金额" prop="money">
+        <ElFormItem label="退款金额" prop="amount">
             <ElInputNumber 
             :precision="2"
             style="width: 100%;"
-            v-model="form.money"
+            v-model="form.amount"
             placeholder="请输入退款金额" 
             controls-position="right"/>
         </ElFormItem>
@@ -77,7 +77,7 @@ const visible = computed({
 const form = reactive<Order.Params.Refund>({
     id: 0, // 权限ID
     type: AfterSalesType.ServiceNotCompleted,
-    money: null,
+    amount: null,
     reason: null,
 })
 
@@ -88,7 +88,7 @@ const rules = reactive<FormRules>({
     type: [
         { required: true, message: '请选择退款类型', trigger: 'blur' },
     ],
-    money: [
+    amount: [
         { required: true, message: '请输入退款金额', trigger: 'blur' },
     ],
     reason: [
@@ -114,7 +114,7 @@ watch(
 const initForm = async () => {
     Object.assign(form, {
         id: props.id!,
-        money: 0,
+        amount: 0,
     })
 }
 

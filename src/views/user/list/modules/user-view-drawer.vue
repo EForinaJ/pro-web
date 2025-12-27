@@ -10,7 +10,6 @@
           @tab-change="changeMneu">
             <ElTabPane label="用户详情" name="detail" />
             <ElTabPane label="余额变更" name="balance"/>
-            <ElTabPane label="充值记录" name="recharge"/>
         </ElTabs>
         <component :is="userMap[activeKey]" :id="id"/>
     </ElDrawer>
@@ -21,7 +20,6 @@ import type { Component } from 'vue';
 import UserDetail from './user-detail.vue';
 import { TabPaneName } from 'element-plus';
 import UserBalanceList from './user-balance-list.vue';
-import UserRechargeList from './user-recharge-list.vue';
 interface Props {
     modelValue: boolean
     id?: number | null
@@ -48,7 +46,6 @@ const changeMneu = (name: TabPaneName)=>{
 const userMap: Record<string, Component> = {
     "detail": UserDetail,
     "balance":UserBalanceList,
-    "recharge": UserRechargeList,
 };
 
   

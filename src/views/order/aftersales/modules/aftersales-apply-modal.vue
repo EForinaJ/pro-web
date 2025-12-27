@@ -115,7 +115,6 @@ watch(
 const initForm = async () => {
     Object.assign(form, {
         id: props.id!,
-        money: 0,
     })
 }
 

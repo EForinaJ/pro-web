@@ -74,14 +74,3 @@ export function fetchGetUserBalanceList(params: {
   })
 }
 
-export function fetchGetUserRechargeList(params: {
-  id: number,
-  page: number,
-  limit: number
-}) {
-  return request.get<User.Response.RechargeList>({
-    url: '/user/recharge/list',
-    params
-  })
-}
-

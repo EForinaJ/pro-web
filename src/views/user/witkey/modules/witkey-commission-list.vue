@@ -68,12 +68,12 @@ const {
                 formatter: (row) => {
                     if (row.mode == FundMode.Add) {
                         return  h('div', { class: 'witkey flex-c gap-1' }, [
-                            h('span', { class: 'text-primary text-sm' },"+" + row.money + site.symbol!),
+                            h('span', { class: 'text-primary text-sm' },"+" + row.amount + site.symbol!),
                         ])
                     }
                     if (row.mode == FundMode.Sub) {
                         return  h('div', { class: 'witkey flex-c gap-2' }, [
-                            h('span', { class: 'text-error text-sm' }, "-" +row.money + site.symbol!),
+                            h('span', { class: 'text-error text-sm' }, "-" +row.amount + site.symbol!),
                         ])
                     }
                 }

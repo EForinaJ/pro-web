@@ -12,7 +12,7 @@
             <ElInputNumber 
             :precision="2"
             style="width: 100%;"
-            v-model="form.money" placeholder="请输入预存充值" controls-position="right"> </ElInputNumber>
+            v-model="form.amount" placeholder="请输入预存充值" controls-position="right"> </ElInputNumber>
         </ElFormItem>
       </ElForm>
       <template #footer>
@@ -59,14 +59,14 @@ const visible = computed({
  */
  const form = reactive<User.Params.Recharge>({
     id: 0, // 权限ID
-    money: null,
+    amount: null,
 })
 
 /**
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    money: [
+    amount: [
         { required: true, message: '请输入预存充值', trigger: 'blur' },
     ],
 })

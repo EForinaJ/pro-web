@@ -14,11 +14,11 @@
                 <ElOption label="增加" :value="FundMode.Add" />
             </ElSelect>
         </ElFormItem>
-        <ElFormItem label="变更金额" prop="money">
+        <ElFormItem label="变更金额" prop="amount">
             <ElInputNumber 
             :precision="2"
             style="width: 100%;"
-            v-model="form.money" placeholder="请输入变更金额" controls-position="right"> </ElInputNumber>
+            v-model="form.amount" placeholder="请输入变更金额" controls-position="right"> </ElInputNumber>
         </ElFormItem>
         <ElFormItem label="变更备注" prop="remark">
           <ElInput
@@ -74,7 +74,7 @@ const visible = computed({
  */
  const form = reactive<User.Params.ChangeBalance>({
     id: 0, // 权限ID
-    money: null,
+    amount: null,
     mode: null,
     remark: null,
 })
@@ -83,7 +83,7 @@ const visible = computed({
  * 表单验证规则
  */
 const rules = reactive<FormRules>({
-    money: [
+    amount: [
         { required: true, message: '请输入变更金额', trigger: 'blur' },
     ],
     mode: [
@@ -112,7 +112,7 @@ watch(
 const initForm = async () => {
     Object.assign(form, {
         id: props.id!, // 权限ID
-        money: null,
+        amount: null,
         mode: null,
         remark: null,
     })

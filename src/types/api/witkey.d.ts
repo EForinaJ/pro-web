@@ -17,13 +17,8 @@ declare namespace Witkey {
         interface ChangeCommission {
             id?: number | null,
             mode: number | null;
-            money: number | null;
+            amount: number | null;
             remark: string | null;
-        }
-
-        interface Recharge {
-            id?: number;
-            money: number | null;
         }
     }
     namespace Response {
@@ -73,26 +68,9 @@ declare namespace Witkey {
             type:number;
             after:number;
             before:number;
-            money:number;
+            amount:number;
             mode:number;
             remark:string;
-            createTime: string;
-        }>
-        type RechargeList = Api.Common.PaginatedResponse<{
-            id: number;
-            code:string;
-            money:number;
-            payType:number;
-            status:number;
-            createTime: string;
-        }>
-        type Logs = Api.Common.PaginatedResponse<{
-            id: number;
-            name: string;
-            createTime: number;
-            content: string;
-            mode: number;
-            status:number;
             createTime: string;
         }>
     }
